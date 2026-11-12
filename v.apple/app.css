@@ -684,3 +684,365 @@ h3 { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spac
 .sheet-viewer, .sheet-viewer::backdrop { background: var(--canvas); }
 .sheet-count { background: rgba(29,29,31,.72); }
 .player .btn, .player .text-button { color: var(--accent-dark); border-color: var(--accent-dark); }
+/* 가사 조절 접기 버튼: 작고 조용하게 */
+#player-hero .lyr-toggle { align-self: center; margin: 8px 0 0; height: 28px; padding: 0 12px; font-size: 12px; color: var(--muted); }
+
+/* ── apple: library (화면별 다듬기) ── */
+/* 콘티·라이브러리 탭 apple 덧칠. app.css 뒤에 붙인다. 토큰(--ink 등)만 쓴다. */
+
+/* 머리: 작은 설명 위에 큰 제목, 오른쪽에 동작 */
+#tab-conti .kicker, #tab-library .kicker { margin: 0 0 2px; font-size: 13px; line-height: 1.3; color: var(--muted); letter-spacing: -.08px; }
+#tab-conti h1, #tab-library h1 { margin: 0 0 18px; font-size: 34px; font-weight: 600; line-height: 1.12; letter-spacing: -.5px; }
+#tab-conti .head { align-items: flex-start; gap: 8px; }
+#tab-conti .head h1 { margin-bottom: 6px; }
+#tab-conti .acts { gap: 0; margin: -4px -10px 0 0; flex: none; }
+/* 아이콘 버튼은 누를 수 있으니 파란색, 크기는 44 유지 */
+#tab-conti .acts .ib { color: var(--accent); width: 44px; height: 44px; }
+#tab-conti .acts .ib:active { background: rgba(0,0,0,.05); }
+#tab-conti .acts .ib svg.i { width: 22px; height: 22px; }
+/* 목록 바꾸기: 보이는 높이 36, 누르는 면은 44 */
+#tab-conti .acts .chip { position: relative; height: 34px; margin-right: 4px; padding: 0 14px; background: var(--card); color: var(--accent); border: 1px solid var(--hairline); box-shadow: none; font-size: 14px; }
+#tab-conti .acts .chip::after { content: ""; position: absolute; inset: -5px -4px; }
+
+/* 섹션 제목 */
+#tab-library h2 { margin: 34px 0 12px; font-size: 22px; font-weight: 600; line-height: 1.18; letter-spacing: .2px; color: var(--ink); }
+#tab-library h2:first-of-type { margin-top: 28px; }
+/* 콘티의 곡 수 줄은 제목이 아니라 보조 설명 */
+#tab-conti > h2 { margin: 14px 0 4px; font-size: 13px; font-weight: 400; letter-spacing: -.08px; color: var(--muted); }
+
+/* 곡 줄: 구분선은 글자 시작 위치부터 */
+.pane .row { position: relative; gap: 12px; min-height: 68px; padding: 10px 6px; margin: 0 -6px; border-bottom: 0; border-radius: 12px; }
+.pane .row::after { content: ""; position: absolute; bottom: 0; left: 66px; right: 6px; height: 1px; background: var(--line); pointer-events: none; }
+.pane .row:has(.drag)::after { left: 150px; }
+.pane .row:last-child::after, .pane .row.now::after { display: none; }
+.pane .row .n { width: 16px; text-align: center; font-size: 13px; color: var(--muted); }
+.pane .thumb { width: 48px; height: 48px; border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+.pane .row .t > b { font-size: 17px; font-weight: 400; line-height: 1.29; letter-spacing: -.374px; color: var(--ink); }
+.pane .row .t > span { margin-top: 1px; font-size: 13px; line-height: 1.3; letter-spacing: -.08px; color: var(--muted); }
+.pane .row .more, .pane .row .drag { color: var(--muted); width: 44px; height: 44px; margin: 0 -8px 0 0; }
+.pane .row .drag { margin: 0 -10px 0 -8px; color: #aeaeb2; }
+.pane .row .more:active { background: rgba(0,0,0,.05); }
+.pane .row .more svg.i, .pane .row .drag svg.i { width: 20px; height: 20px; }
+/* 지금 곡: 파란 제목과 번호만 */
+.pane .row.now { background: none; }
+.pane .row.now .t > b { color: var(--accent); font-weight: 600; }
+.pane .row.now .n, .pane .row.now .t > span { color: var(--accent); }
+.pane .row.off { opacity: .5; }
+.pane .row:active { background: rgba(0,0,0,.04); }
+
+/* 끌기: 선택은 살짝 뜬 흰 면, 빈 자리는 옅은 회색, 줄은 선 없이 */
+.pane .row.chosen, .pane .row.lift { background: var(--card); border-radius: 12px; }
+.pane .row.ghost { background: rgba(0,0,0,.05); }
+.pane .row.chosen::after, .pane .row.lift::after, .pane .row.ghost::after { display: none; }
+.row.lift { box-shadow: 0 0 0 1px var(--line), 0 10px 30px rgba(0,0,0,.12); }
+
+/* 라이브러리 검색: 알약 */
+#tab-library .search { height: 44px; margin: 0; padding: 0 16px; gap: 8px; border-radius: 999px; background: var(--card); border: 1px solid var(--hairline); }
+#tab-library .search svg.i { width: 18px; height: 18px; flex: none; color: var(--muted); margin: 0; }
+#tab-library .search input { font-size: 17px; letter-spacing: -.374px; }
+#tab-library .search:focus-within { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+
+/* 내 목록 가로 표지: 화면 끝까지 밀리고 첫 칸은 글자와 맞춘다 */
+#tab-library .lists { gap: 14px; margin: 0 -20px; padding: 0 20px 6px; scroll-padding: 0 20px; scroll-snap-type: x proximity; }
+#tab-library .lists > * { width: 128px; scroll-snap-align: start; font-size: 15px; line-height: 1.3; letter-spacing: -.224px; color: var(--ink); }
+#tab-library .lists .cv { width: 128px; height: 128px; margin-bottom: 8px; border-radius: 18px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+#tab-library .lists small { display: block; margin-top: 1px; font-size: 13px; letter-spacing: -.08px; color: var(--muted); }
+/* 새 목록 칸: 흰 면, 파란 더하기 */
+#tab-library .new .cv.glass { background: var(--card); border: 1px dashed var(--hairline); color: var(--accent); }
+#tab-library .new .cv svg.i { width: 32px; height: 32px; stroke-width: 1.4; }
+#tab-library .new { color: var(--accent); text-align: left; }
+#tab-library .new:active { transform: scale(.95); }
+
+/* 빈 상태 */
+#tab-conti .empty, #tab-library .empty { margin: 0; padding: 48px 24px; font-size: 15px; line-height: 1.47; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  #tab-library .lists { scroll-snap-type: none; }
+}
+
+/* ── apple: meditate (화면별 다듬기) ── */
+/* 묵상 탭 애플 층: 차분한 읽기 면. app.css 뒤에 붙는다. 움직임은 transform/opacity만. */
+
+/* 머리글: 위 작은 "1 / 3", 아래 큰 제목 */
+#tab-meditate .kicker { font-size: 14px; line-height: 1.29; letter-spacing: -.224px; color: var(--muted); font-variant-numeric: tabular-nums; min-height: 18px; }
+#tab-meditate h1 { margin: 2px 0 18px; font-size: 34px; font-weight: 600; letter-spacing: -.5px; }
+
+/* 가사|악보 전환: iOS 분할 컨트롤 */
+#tab-meditate .seg { display: flex; width: 100%; padding: 2px; border-radius: 9px; background: rgba(118,118,128,.12); }
+#tab-meditate .seg button { flex: 1; height: 32px; border-radius: 7px; font-size: 14px; font-weight: 400; letter-spacing: -.224px; color: var(--ink); background: none; }
+#tab-meditate .seg button[aria-pressed="true"] { background: var(--card); font-weight: 600; box-shadow: 0 0 0 .5px rgba(0,0,0,.04), 0 3px 8px rgba(0,0,0,.12); }
+
+/* 전체 복사·느낀점 양식: 조용한 파란 글자 링크 */
+#tab-meditate .copyrow { gap: 4px; margin: 6px -10px 10px; }
+#tab-meditate .copyrow .chip {
+  height: 44px; padding: 0 10px; border: 0; background: none; box-shadow: none; border-radius: 8px;
+  font-size: 15px; letter-spacing: -.24px; color: var(--accent);
+}
+#tab-meditate .copyrow .chip:active { opacity: .5; }
+
+/* 곡 한 장: 제목이 먼저, 그 아래 악보와 메모 */
+#tab-meditate .songs { gap: 16px; padding-bottom: 4px; }
+#tab-meditate .slide h3 { margin: 6px 2px 16px; font-size: 28px; font-weight: 600; line-height: 1.14; letter-spacing: -.4px; text-wrap: balance; overflow-wrap: anywhere; }
+#tab-meditate .slide .by { margin: 0 2px 12px; font-size: 14px; letter-spacing: -.224px; color: var(--muted); }
+#tab-meditate .slide .ly { margin: 0 2px 8px; font-size: 17px; line-height: 1.47; letter-spacing: -.374px; }
+#tab-meditate .slide .stack { gap: 12px; }
+
+/* 메모 카드: 흰 면, 얇은 선, 편안한 글쓰기 */
+#tab-meditate .slide .memo { margin: 8px 0 0; padding: 18px 20px 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); box-shadow: none; }
+#tab-meditate .memo label { display: block; font-size: 13px; font-weight: 600; line-height: 1.3; letter-spacing: -.12px; color: var(--muted); }
+#tab-meditate .memo textarea { min-height: 7.5em; margin-top: 10px; font-size: 17px; line-height: 1.47; letter-spacing: -.374px; caret-color: var(--accent); }
+#tab-meditate .memo textarea::placeholder { color: rgba(60,60,67,.3); }
+
+/* 메모 아래: 저장됨은 왼쪽, 지우기·복사는 파란 글자 링크 */
+#tab-meditate .memo-foot { gap: 0; margin: 6px 0 0; }
+#tab-meditate .memo-foot > span { margin: 0 auto 0 4px; font-size: 13px; letter-spacing: -.12px; color: var(--muted); }
+#tab-meditate .memo-foot .chip {
+  height: 40px; padding: 0 12px; border: 0; background: none; border-radius: 8px;
+  font-size: 15px; letter-spacing: -.24px; color: var(--accent);
+}
+#tab-meditate .memo-foot .chip:disabled { color: var(--muted); opacity: .45; }
+#tab-meditate .memo-foot .chip:active:not(:disabled) { opacity: .5; }
+#tab-meditate .slide [role="alert"] { margin: 4px 4px 0; font-size: 14px; letter-spacing: -.224px; color: var(--danger); }
+#tab-meditate .slide [role="alert"]:empty { display: none; }
+
+/* 쪽 표시점: 크기는 고정, 투명도만 바뀐다 */
+#tab-meditate .dots { gap: 8px; margin: 16px 0 0; }
+#tab-meditate .dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); opacity: .18; transition: opacity .25s; }
+#tab-meditate .dots i.on { width: 7px; opacity: .9; }
+
+/* 악보 사진: 얇은 선 8px 모서리, 불러오는 중은 흰 면 */
+#tab-meditate .sheet img { border-radius: 8px; border: 1px solid var(--line); box-shadow: none; }
+#tab-meditate .sheet.is-loading { min-height: 200px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); font-size: 14px; letter-spacing: -.224px; color: var(--muted); }
+#tab-meditate .sheet .btn.danger { display: block; min-height: 40px; margin: 2px auto 0; padding: 0 12px; border: 0; background: none; font-size: 15px; }
+#tab-meditate .sheet-add { min-height: 44px; margin-top: 4px; border-radius: 999px; font-size: 17px; letter-spacing: -.374px; }
+#tab-meditate .stack > .btn:not(.sheet-add) { justify-self: center; }
+#tab-meditate .empty { font-size: 15px; letter-spacing: -.224px; }
+
+/* 사진 크게 보기: 검은 바탕에 사진만, 조용한 닫기·쪽수 */
+.sheet-viewer, .sheet-viewer::backdrop { background: #000; }
+.sheet-viewer .viewer-page img { border-radius: 4px; }
+.sheet-viewer .sheet-count { top: calc(20px + var(--inset-top)); left: 16px; padding: 5px 12px; border-radius: 999px; background: rgba(60,60,67,.6); font-size: 14px; font-weight: 600; letter-spacing: -.224px; line-height: 1.29; -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); }
+.sheet-viewer .sheet-close { background: rgba(60,60,67,.6); color: #fff; box-shadow: none; -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); }
+
+/* 움직임 줄이기: 표시점 전환을 끈다 */
+@media (prefers-reduced-motion: reduce) {
+  #tab-meditate .dots i { transition: none; }
+}
+
+/* ── apple: player (화면별 다듬기) ── */
+/* 아래 독, 전체 플레이어(어두운 칸), 연습 탭. app.css 뒤에 붙인다. 움직임은 transform/opacity만. */
+
+/* ── 아래 독: 흐린 회백 유리, 그림자 없음 ── */
+.dock .mini.glass, .dock .tabs.glass {
+  background: var(--glass); border: 0; box-shadow: none;
+  -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+}
+.dock .mini.glass { border-bottom: 1px solid var(--line); }
+.dock .tabs.glass { border-top: 1px solid var(--line); }
+.dock .mini .art { width: 44px; height: 44px; border-radius: 8px; box-shadow: none; }
+.dock .mini .tt b { font-size: 15px; font-weight: 600; letter-spacing: -.224px; color: var(--ink); }
+.dock .mini .tt span { font-size: 13px; color: var(--muted); letter-spacing: -.12px; }
+.dock .mini .ib { color: var(--ink); }
+.dock .mini .prog { left: 12px; right: 12px; height: 2px; background: rgba(0,0,0,.08); }
+.dock .tab { min-height: 44px; font-size: 10px; letter-spacing: -.08px; color: var(--muted); }
+.dock .tab[aria-current="page"] { color: var(--accent); }
+.dock .tab[aria-current="page"] svg { transform: none; }
+
+/* ── 전체 플레이어: 어두운 칸 ── */
+#player { background: var(--tile); color: var(--on-dark); }
+#player .top { padding-bottom: 4px; }
+#player .top .ib { width: 44px; height: 44px; background: rgba(255,255,255,.12); color: var(--on-dark); }
+#player .top .ib:active { background: rgba(255,255,255,.2); }
+#player-hero { padding: 8px 28px 16px; gap: 0; }
+#player-hero h1 { margin: 0 0 4px; font-size: 28px; line-height: 1.14; letter-spacing: -.3px; color: var(--on-dark); }
+#player-hero p { font-size: 17px; letter-spacing: -.374px; color: var(--on-dark-muted); }
+/* 칩은 어두운 면 위 반투명 알약, 글자는 하늘색 */
+#player .chip, #player-hero .chip {
+  min-height: 44px; height: 44px; padding: 0 20px; border: 0; background: rgba(255,255,255,.12);
+  color: var(--accent-dark); font-size: 15px; letter-spacing: -.224px;
+}
+#player .chip:active { background: rgba(255,255,255,.2); }
+#player-hero .lyr-edit .chip { height: 44px; margin: 0; }
+#player-hero .lyr-edit { gap: 4px 8px; padding-top: 4px; }
+.lyr-sync { color: var(--on-dark-muted); font-size: 14px; }
+
+/* 가사: 지금 줄은 굵은 흰색, 나머지는 흐리게 */
+#player-hero .lyr-lines p { padding: 9px 0; font-size: 22px; line-height: 1.35; font-weight: 600; letter-spacing: -.3px; color: rgba(255,255,255,.3); }
+#player-hero .lyr-lines p.now { font-size: 22px; font-weight: 700; color: var(--on-dark); }
+
+/* 조작부: 같은 어두운 면 안에서 칸 하나로 */
+#player .console.glass {
+  margin: 0 max(20px, var(--inset-right)) calc(20px + var(--inset-bottom)) max(20px, var(--inset-left));
+  padding: 8px 0 0; background: transparent; border: 0; border-radius: 0; box-shadow: none;
+}
+/* 곡 그림: 가운데, 큰 그림에만 그림자 하나 */
+#player .meta { justify-content: center; margin-bottom: 12px; }
+#player .meta .art { width: 72px; height: 72px; border-radius: 8px; box-shadow: var(--product-shadow); }
+/* 가사가 없으면 그림을 크게 (히어로 아래에서 정사각형으로) */
+#player:has(#player-lyrics[hidden]) .meta { margin: 8px 0 20px; }
+#player:has(#player-lyrics[hidden]) .meta .art { width: min(64vw, 300px); height: min(64vw, 300px); border-radius: 12px; }
+@media (max-height: 640px) {
+  #player:has(#player-lyrics[hidden]) .meta .art { width: min(44vw, 180px); height: min(44vw, 180px); }
+}
+#player .times { margin-top: 2px; font-size: 12px; letter-spacing: -.12px; color: var(--on-dark-muted); }
+#player .ctl { margin-top: 10px; }
+#player .ctl .ib { width: 48px; height: 48px; color: var(--on-dark); }
+#player .ctl .ib:not(.play):active { background: rgba(255,255,255,.12); }
+#player .play, #player .ctl .play { width: 72px; height: 72px; background: var(--on-dark); color: var(--tile); box-shadow: none; }
+#player .on { background: rgba(255,255,255,.14); color: var(--accent-dark); }
+#player .foot { margin-top: 12px; }
+#player .foot .btn {
+  min-height: 44px; padding: 0 22px; border: 0; background: rgba(255,255,255,.12);
+  color: var(--accent-dark); font-size: 15px; letter-spacing: -.224px;
+}
+#player #play-notice { color: #ff6961; }
+
+/* 위치 막대: 얇은 길, 둥근 흰 손잡이. 길이 얇아도 누르는 칸은 44px */
+#seek, #volume-range { height: 44px; margin: 0; }
+#seek::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; }
+#seek::-moz-range-track { height: 4px; border-radius: 2px; }
+#seek::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -8px; background: var(--on-dark); box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+#seek::-moz-range-thumb { width: 20px; height: 20px; background: var(--on-dark); box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+#volume-pop { padding: 4px 16px; border-radius: 18px; background: var(--tile-2); box-shadow: none; }
+#volume-range::-webkit-slider-runnable-track { height: 4px; background: linear-gradient(var(--on-dark), var(--on-dark)) no-repeat 0 / var(--progress, 100%) 100%, rgba(255,255,255,.2); }
+#volume-range::-moz-range-track { height: 4px; background: linear-gradient(var(--on-dark), var(--on-dark)) no-repeat 0 / var(--progress, 100%) 100%, rgba(255,255,255,.2); }
+#volume-range::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -8px; background: var(--on-dark); box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+#volume-range::-moz-range-thumb { width: 20px; height: 20px; background: var(--on-dark); box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+
+/* ── 연습 탭 ── */
+#tab-practice .seg.speed { background: rgba(0,0,0,.06); }
+#tab-practice .seg.speed button { min-height: 44px; font-size: 15px; }
+#tab-practice .seg.speed button[aria-pressed="true"] { color: var(--ink); }
+/* 구간 막대: 진한 파랑은 지금 위치, 연한 띠는 A~B */
+#tab-practice .loopbar { height: 44px; margin: 6px 0 0; }
+#tab-practice .loopbar::-webkit-slider-runnable-track { height: 8px; border-radius: 4px; background:
+  linear-gradient(90deg, transparent var(--a, 0%), rgba(0,102,204,.35) var(--a, 0%), rgba(0,102,204,.35) var(--b, 0%), transparent var(--b, 0%)),
+  linear-gradient(var(--accent), var(--accent)) no-repeat 0 / var(--progress, 0%) 100%, rgba(0,0,0,.08); }
+#tab-practice .loopbar::-moz-range-track { height: 8px; border-radius: 4px; background:
+  linear-gradient(90deg, transparent var(--a, 0%), rgba(0,102,204,.35) var(--a, 0%), rgba(0,102,204,.35) var(--b, 0%), transparent var(--b, 0%)),
+  linear-gradient(var(--accent), var(--accent)) no-repeat 0 / var(--progress, 0%) 100%, rgba(0,0,0,.08); }
+#tab-practice .loopbar::-webkit-slider-thumb { width: 24px; height: 24px; margin-top: -8px; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.12), 0 1px 4px rgba(0,0,0,.25); }
+#tab-practice .loopbar::-moz-range-thumb { width: 24px; height: 24px; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.12), 0 1px 4px rgba(0,0,0,.25); }
+#tab-practice .ab { gap: 8px; margin-top: 8px; }
+#tab-practice .ab .btn { min-height: 44px; padding: 0 12px; font-size: 15px; letter-spacing: -.224px; }
+#tab-practice .ab .btn:last-child { color: var(--muted); border-color: var(--hairline); }
+#tab-practice .panel .note { margin: 12px 0 0; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  #player, .dock .tab svg { transition: none !important; }
+}
+
+/* ── apple: sheets (화면별 다듬기) ── */
+/* 시트·대화창·영상 칸·알림: iOS 액션 시트와 묶음 목록 느낌. 움직임은 transform, opacity만. */
+
+/* 시트: 회백 바닥 위에 흰 묶음. 아래에서 올라온다. */
+.menu, .template-dialog {
+  background: var(--canvas); border-radius: 18px; padding: 20px 8px 8px;
+  width: min(440px, calc(100% - 16px)); margin: auto auto calc(8px + var(--inset-bottom));
+}
+.menu[open], .template-dialog[open] { animation: sheet-up .38s var(--spring); }
+.menu[open]::backdrop, .template-dialog[open]::backdrop { animation: sheet-dim .3s ease-out; }
+@keyframes sheet-up { from { transform: translateY(100%); } }
+@keyframes sheet-dim { from { opacity: 0; } }
+
+/* 제목과 설명 */
+.menu h2, .template-dialog h2 { margin: 0 12px 4px; font-size: 17px; font-weight: 600; letter-spacing: -.374px; text-align: center; }
+.menu p, .template-dialog p { margin: 0 12px 12px; font-size: 13px; line-height: 1.45; letter-spacing: -.08px; color: var(--muted); }
+.menu p.kicker { margin: 14px 16px 6px; font-size: 13px; font-weight: 400; }
+
+/* 줄: 한 묶음 안에서 얇은 선으로 나눈다 (연달은 버튼이 한 묶음) */
+.menu > button {
+  position: relative; justify-content: center; min-height: 56px; margin: 0; padding: 0 16px; border: 0; border-radius: 0;
+  background: var(--card); box-shadow: none; text-align: center;
+  font: 400 17px var(--sans); letter-spacing: -.374px; color: var(--accent);
+}
+.menu > button + button { border-top: 1px solid var(--line); }
+.menu > button:active { background: #e8e8ed; }
+/* 묶음 위·아래 모서리 */
+.menu > button:first-child, .menu > :not(button) + button { border-top: 0; border-top-left-radius: 14px; border-top-right-radius: 14px; }
+.menu > button:has(+ :not(button)), .menu > button:has(+ button:last-child) { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; }
+/* 목록 고르기·메뉴 줄은 글자색을 먹색으로, 지금 고른 줄은 파란 체크 */
+.menu > button:not(:last-child) { color: var(--ink); }
+.menu > button.danger:not(:last-child) { color: var(--danger); }
+.menu > button[aria-current="true"]::after { content: "\2713"; position: absolute; right: 18px; color: var(--accent); font-weight: 600; }
+/* 닫기: 따로 떨어진 흰 줄, 파란 글자 */
+.menu.menu > button:last-child {
+  margin-top: 8px; border-top: 0; border-radius: 14px; background: var(--card); color: var(--accent); font-weight: 600; justify-content: center;
+}
+.menu.menu > button:last-child:active { background: #e8e8ed; }
+
+/* 입력 칸: 흰 면 위 얇은 선 */
+.menu input, .template-dialog input, #template-input {
+  min-height: 48px; border-radius: 12px; background: var(--card); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 17px; letter-spacing: -.374px;
+}
+.menu input:focus, .template-dialog input:focus, #template-input:focus { box-shadow: inset 0 0 0 2px var(--accent-focus); }
+.menu .search.search, .menu label.search { margin: 0 8px; }
+#template-input { margin: 0 4px; width: calc(100% - 8px); min-height: 140px; padding: 12px 14px; line-height: 1.47; }
+.template-dialog p, .template-dialog h2 { margin-left: 12px; margin-right: 12px; }
+
+/* 아래 버튼 줄: 주 버튼은 파란 알약, 나머지는 파란 글자 */
+.buttons, .menu .acts { gap: 4px; margin: 12px 4px 4px; align-items: center; }
+.buttons button, .menu .acts button { min-height: 44px; border-radius: 999px; background: none; color: var(--accent); font: 400 17px var(--sans); letter-spacing: -.374px; }
+.buttons button.primary, .menu .acts button[type=submit] { background: var(--accent); color: #fff; font-weight: 600; }
+.buttons button.primary:disabled, .menu .acts button[type=submit]:disabled { opacity: .35; }
+.buttons button:disabled, .menu .acts button:disabled { opacity: .35; }
+
+.card-error { margin: 8px 12px 0; font-size: 13px; letter-spacing: -.08px; color: var(--danger); }
+
+/* 사용자 관리: 입력 + 파란 알약, 아래 흰 묶음 목록 */
+.users-form { margin: 0 4px; }
+.users-form input { border-radius: 999px; padding: 0 18px; }
+.users-form button { min-height: 44px; border-radius: 999px; padding: 0 20px; background: var(--accent); color: #fff; font: 400 17px var(--sans); letter-spacing: -.374px; }
+.users-form button:disabled { opacity: .35; }
+.users-list { margin: 12px 4px 0; padding: 0 16px; background: var(--card); border-radius: 14px; }
+.users-list:empty { display: none; }
+.users-list li { min-height: 56px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.users-list li:last-child { border-bottom: 0; }
+.user-name { font-size: 17px; letter-spacing: -.374px; }
+.users-list .text-button { min-height: 44px; padding: 0 8px; background: none; color: var(--accent); font-size: 15px; font-weight: 400; }
+.users-list .icon { width: 44px; height: 44px; background: none; color: var(--danger); }
+.users-list .icon .i { width: 20px; height: 20px; }
+.users-list span:not(.user-name):not(.user-badge) { font-size: 13px; }
+.user-badge { font-size: 13px; }
+.template-dialog .empty { margin: 12px 12px 0; font-size: 15px; }
+
+/* 참고 영상: 위에서 내려오는 흐린 흰 판 */
+#video-panel { animation: video-down .36s var(--spring); }
+@keyframes video-down { from { transform: translateY(-100%); } }
+#video-panel .video-frame { border-radius: 12px; }
+#video-panel .video-foot { padding: 8px 0 10px; }
+#video-panel .video-foot .text-button { min-height: 44px; padding: 0 8px; border-radius: 0; background: none; box-shadow: none; color: var(--accent); font: 400 17px var(--sans); letter-spacing: -.374px; }
+#video-panel .video-link input { min-height: 44px; padding: 0 18px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 17px; }
+#video-panel .video-link input:focus { box-shadow: inset 0 0 0 2px var(--accent-focus); }
+#video-panel .video-link button { min-height: 44px; padding: 0 20px; border-radius: 999px; background: var(--accent); box-shadow: none; color: #fff; font: 400 17px var(--sans); letter-spacing: -.374px; }
+
+/* 알림: 위에서 살짝 내려오는 흰 알약 */
+.notice { font-size: 14px; letter-spacing: -.224px; }
+#save-notice:not(:empty) {
+  left: 50%; right: auto; width: max-content; max-width: calc(100% - 32px); padding: 10px 18px; border-radius: 14px;
+  background: var(--glass); border: 1px solid var(--line); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+  transform: translateX(-50%); pointer-events: none; animation: notice-in .3s var(--spring);
+}
+@keyframes notice-in { from { transform: translate(-50%, -16px); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .menu[open], .template-dialog[open], .menu[open]::backdrop, .template-dialog[open]::backdrop, #video-panel, #save-notice { animation: none !important; }
+}
+
+/* 어두운 플레이어 위의 '가사 조절' 버튼 */
+.player #player-hero .lyr-toggle { color: var(--on-dark-muted); background: rgba(255,255,255,.08); }
+
+/* 디자인 검토 반영: 대비, 누를 자리, 좁은 화면 */
+@media (min-width: 760px) { #volume-pop { padding: 0; background: none; } }
+#player .chip, #player-hero .chip, #player .foot .btn { background: var(--tile-2); }
+#player-hero .lyr-lines p { color: rgba(255,255,255,.4); }
+.pane .row .drag { color: #8e8e93; }
+.dock .tab { font-size: 11px; }
+#tab-meditate .seg button { height: 44px; }
+#tab-meditate .memo-foot .chip { height: 44px; }
+#tab-meditate .sheet .btn.danger { min-height: 44px; }
+#tab-conti .head { flex-wrap: wrap; }
+#tab-conti .head > div:first-child { min-width: 0; }
+#tab-conti h1 { overflow-wrap: anywhere; }
+#player-hero .lyr-toggle { min-height: 28px; height: 28px; padding: 0 12px; margin: 8px 0 0; font-size: 12px; }
+.player #player-hero .lyr-toggle { color: var(--on-dark-muted); background: rgba(255,255,255,.08); }

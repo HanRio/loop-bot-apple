@@ -20,7 +20,7 @@ import { attach as scrollTitle, initTitleScroll } from './title-scroll.js';
 
 const API_BASE = 'https://rrpmpqxoqxlwrmflpiyi.supabase.co/functions/v1/loopbot-api';
 const FILE_BASE = 'https://168-110-54-40.sslip.io';
-const IS_LOCAL = location.hostname === 'localhost' || !window.Telegram?.WebApp?.initData; // v.apple: 텔레그램 밖에서는 가짜 데이터로 화면만 본다
+const IS_LOCAL = location.hostname === 'localhost' || !window.Telegram?.WebApp?.initData;
 const REPEAT_ORDER = ['all', 'one', 'off'];
 const REPEAT_LABEL = { all: '전체 반복', one: '한 곡 반복', off: '반복 끔' };
 const KEY_PLAYLIST = 'loopbot.player.playlist';
