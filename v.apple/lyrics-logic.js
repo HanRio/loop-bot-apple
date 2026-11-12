@@ -1,0 +1,66 @@
+// 가사집 화면의 순수 계산. DOM과 네트워크는 모른다.
+
+// 긴 변이 max를 넘으면 비율을 지켜 줄인 정수 크기. 넘지 않으면 그대로다.
+export function fitSize(width, height, max) {
+  const long = Math.max(width, height);
+  if (long <= max) return { width, height };
+  const scale = max / long;
+  return {
+    width: Math.max(1, Math.round(width * scale)),
+    height: Math.max(1, Math.round(height * scale)),
+  };
+}
+
+// 카드 구조가 바뀔 때만 달라지는 값. 제목과 느낀점은 넣지 않는다. 그래야 입력 중에 카드가 다시 그려지지 않는다.
+export function feedKey(playlistId, trackIds, media, isOwner) {
+  const rows = trackIds.map((id) => [id, media[id]?.sheet_version ?? null, media[id]?.video_id ?? null]);
+  return JSON.stringify([playlistId, isOwner, rows]);
+}
+
+// 임시 글 중 서버 값과 다른 것만 되살린다. 서버 값이 없으면 빈 글과 같다.
+export function draftsToRestore(drafts, serverNotes) {
+  return Object.fromEntries(Object.entries(drafts).filter(([id, body]) => body !== (serverNotes[id] ?? '')));
+}
+
+// 보고 있는 목록을 고칠 수 있는지. ownIds는 내 목록 id 배열이다.
+export function isWritable(playlist, ownIds) {
+  return Boolean(playlist) && ownIds.includes(playlist.id);
+}
+
+export function embedUrl(videoId) {
+  return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?playsinline=1&rel=0`;
+}
+
+export function watchUrl(videoId) {
+  return `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+}
+
+// Cache Storage 키. 사진을 바꾸면 version이 올라 옛 사진은 다시 받지 않는다. 쪽마다 따로 둔다.
+export function sheetCacheKey(trackId, version, page) {
+  return `sheet-${trackId}-${version}-${page}`;
+}
+
+// 쪽 번호를 0부터 count-1 사이로 맞춘다. 쪽이 없으면 0이다.
+export function clampPage(page, count) {
+  if (count <= 0) return 0;
+  return Math.min(Math.max(page, 0), count - 1);
+}
+
+// 가로 스크롤 위치를 쪽 번호로 바꾼다. step은 쪽 하나의 너비다.
+export function pageFromScroll(scrollLeft, step, count) {
+  if (step <= 0) return 0;
+  return clampPage(Math.round(scrollLeft / step), count);
+}
+
+// 보고 있는 쪽과 그다음 쪽. 받을 쪽이 없으면 빈 배열이다.
+export function pagesToLoad(page, count) {
+  return [page, page + 1].filter((p) => p >= 0 && p < count);
+}
+
+// 처음 보여 줄 목록. 내 목록이 비어 있고 공유 목록이 있으면 공유 목록을 연다. 처음 온 사람이 빈 화면을 보지 않게 한다.
+export function startPlaylistId({ rememberedId, activeId, playlists, sharedPlaylists }) {
+  const isKnown = [...playlists, ...sharedPlaylists].some((p) => p.id === rememberedId);
+  const id = isKnown ? rememberedId : activeId;
+  const own = playlists.find((p) => p.id === id);
+  return own && own.track_ids.length === 0 && sharedPlaylists.length > 0 ? sharedPlaylists[0].id : id;
+}

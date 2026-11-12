@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>플레이리스트</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.6/Sortable.min.js"></script>
+<link rel="stylesheet" href="app.css?v=mwdbplbi">
+<script type="importmap">{"imports":{"./api.js":"./api.js?v=mwdbplbi","./app.js":"./app.js?v=mwdbplbi","./audio.js":"./audio.js?v=mwdbplbi","./copy.js":"./copy.js?v=mwdbplbi","./dom.js":"./dom.js?v=mwdbplbi","./fake-api.js":"./fake-api.js?v=mwdbplbi","./lrc.js":"./lrc.js?v=mwdbplbi","./lyrics-logic.js":"./lyrics-logic.js?v=mwdbplbi","./menus.js":"./menus.js?v=mwdbplbi","./note-actions.js":"./note-actions.js?v=mwdbplbi","./note-export.js":"./note-export.js?v=mwdbplbi","./player-lyrics.js":"./player-lyrics.js?v=mwdbplbi","./queue.js":"./queue.js?v=mwdbplbi","./saver.js":"./saver.js?v=mwdbplbi","./shell.js":"./shell.js?v=mwdbplbi","./store.js":"./store.js?v=mwdbplbi","./tab-conti.js":"./tab-conti.js?v=mwdbplbi","./tab-library.js":"./tab-library.js?v=mwdbplbi","./tab-meditate.js":"./tab-meditate.js?v=mwdbplbi","./tab-practice.js":"./tab-practice.js?v=mwdbplbi","./title-scroll.js":"./title-scroll.js?v=mwdbplbi","./ui-logic.js":"./ui-logic.js?v=mwdbplbi","./users-admin.js":"./users-admin.js?v=mwdbplbi","./users-logic.js":"./users-logic.js?v=mwdbplbi","./volume.js":"./volume.js?v=mwdbplbi"}}</script>
+</head>
+<body ontouchstart="">
+<p id="fatal" class="empty" hidden></p>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5.5h2.8v13H8zM13.2 5.5H16v13h-2.8z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="M18 6v12l-8.5-6zM6.5 6v12" /></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M6 6v12l8.5-6zM17.5 6v12" /></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 3l3.5 3.5L17 10M20 6.5H8a4 4 0 0 0-4 4V12M7 21l-3.5-3.5L7 14M4 17.5h12a4 4 0 0 0 4-4V12"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20l1-4L16 5a2.1 2.1 0 0 1 3 3L8 19zM14 7l3 3"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-grip" viewBox="0 0 24 24"><path d="M5 8h14M5 12h14M5 16h14"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9.5l6 6 6-6"/></symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5zM15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5zM16 9.5l5 5M21 9.5l-5 5"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 13v6h14v-6"/></symbol>
+  <symbol id="i-crown" viewBox="0 0 24 24"><path d="M4 18h16M4 15l-1-9 5 4 4-6 4 6 5-4-1 9z"/></symbol>
+</svg>
+
+<div id="app" class="app" hidden>
+  <div id="ambient" class="ambient" aria-hidden="true"></div>
+  <p id="save-notice" class="notice" role="alert"></p>
+
+  <div id="pager" class="pager">
+    <section class="pane" id="tab-conti" aria-label="콘티"></section>
+    <section class="pane" id="tab-library" aria-label="라이브러리"></section>
+    <section class="pane" id="tab-meditate" aria-label="묵상"></section>
+    <section class="pane" id="tab-practice" aria-label="연습"></section>
+  </div>
+
+  <div id="dock" class="dock">
+    <div id="mini" class="mini glass">
+      <button id="mini-open" class="open" type="button" aria-label="플레이어 펼치기">
+        <span id="mini-art" class="art"></span>
+        <span class="tt"><b id="mini-title"></b><span id="mini-sub"></span></span>
+      </button>
+      <button id="mini-play" class="ib" type="button" aria-label="재생"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path id="mini-play-icon" d="M8 5l11 7-11 7z"/></svg></button>
+      <button id="mini-next" class="ib" type="button" aria-label="다음 곡"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 5v14M5 5l9 7-9 7z"/></svg></button>
+      <div id="mini-prog" class="prog"><i></i></div>
+    </div>
+    <nav id="tabs" class="tabs glass" aria-label="탭">
+      <span id="tab-ind" class="ind" aria-hidden="true"></span>
+      <button class="tab" type="button" data-tab="0"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 012-2h12a2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2zM8 3v4M16 3v4M8 11h8M8 15h5"/></svg>콘티</button>
+      <button class="tab" type="button" data-tab="1"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v16M9 4v16M13 5l5 14"/></svg>라이브러리</button>
+      <button class="tab" type="button" data-tab="2"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5v14c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-14c-3-.5-6 0-8 1.5zM12 6v14"/></svg>묵상</button>
+      <button class="tab" type="button" data-tab="3"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a8 8 0 100 16 8 8 0 000-16zM12 9a3 3 0 100 6 3 3 0 000-6z"/></svg>연습</button>
+    </nav>
+  </div>
+
+  <section id="player" class="player" aria-label="재생 화면" aria-hidden="true">
+    <div class="top">
+      <button id="player-close" class="ib" type="button" aria-label="플레이어 접기"><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+    </div>
+    <div id="player-hero">
+      <h1 id="player-title"></h1>
+      <p id="player-sub"></p>
+      <div id="player-lyrics" hidden><div class="lyr-lines"></div><div class="lyr-edit" hidden></div></div>
+      <button id="player-sheet" class="chip" type="button">악보 보기</button>
+    </div>
+    <div class="console glass">
+      <div class="meta"><span id="player-art" class="art"></span></div>
+      <input id="seek" type="range" min="0" max="0" step="0.1" value="0" aria-label="재생 위치">
+      <div class="times"><span id="t-now">0:00</span><span id="t-all">0:00</span></div>
+      <div class="ctl">
+        <button id="repeat" class="ib" type="button" aria-label="전체 반복"><svg class="i" aria-hidden="true"><use href="#i-repeat"/></svg></button>
+        <button id="prev" class="ib" type="button" aria-label="이전 곡"><svg class="i" aria-hidden="true"><use href="#i-prev"/></svg></button>
+        <button id="play" class="ib play" type="button" aria-label="재생"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path id="play-icon" d="M8 5l11 7-11 7z"/></svg></button>
+        <button id="next" class="ib" type="button" aria-label="다음 곡"><svg class="i" aria-hidden="true"><use href="#i-next"/></svg></button>
+        <button id="volume" class="ib" type="button" aria-label="볼륨" hidden><svg class="i" aria-hidden="true"><use id="volume-icon" href="#i-volume"/></svg></button>
+        <div id="volume-pop" hidden><input id="volume-range" type="range" min="0" max="1" step="0.01" value="1" aria-label="볼륨 크기"></div>
+      </div>
+      <div class="foot"><button id="video-open" class="btn" type="button">참고 영상 보기</button></div>
+    </div>
+    <p id="play-notice" class="notice" role="alert"></p>
+  </section>
+
+  <section id="video-panel" hidden>
+    <div id="video-frame" class="video-frame"></div>
+    <div class="video-foot">
+      <button id="video-youtube" class="text-button" type="button">유튜브에서 열기</button>
+      <button id="video-close" class="text-button" type="button">닫기</button>
+    </div>
+  </section>
+</div>
+
+<dialog id="settings-dialog" class="menu" aria-label="설정">
+  <h2>설정</h2>
+  <button id="settings-users" type="button" hidden>사용자 관리</button>
+  <p id="settings-help">목록은 콘티와 라이브러리 탭에서 고르고, 묵상 탭에서 곡마다 느낀점을 적어요. 내 곡은 봇 채팅에 유튜브 링크나 음원 파일을 보내면 들어와요.</p>
+  <button id="settings-close" type="button">닫기</button>
+</dialog>
+<dialog id="sheet-viewer" class="sheet-viewer" aria-label="가사 사진">
+  <button id="sheet-viewer-close" class="round sheet-close" type="button" aria-label="닫기"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+  <div id="sheet-viewer-strip" class="viewer-strip"></div>
+  <span id="sheet-viewer-count" class="sheet-count" aria-hidden="true" hidden></span>
+</dialog>
+<dialog id="template-dialog" class="template-dialog" aria-labelledby="template-title">
+  <h2 id="template-title"></h2>
+  <p id="template-help"></p>
+  <textarea id="template-input" class="well" rows="6"></textarea>
+  <p id="template-error" class="card-error" role="alert"></p>
+  <div class="buttons">
+    <button id="template-default" type="button"></button>
+    <button id="template-cancel" type="button"></button>
+    <button id="template-save" type="button" class="primary"></button>
+  </div>
+</dialog>
+<dialog id="users-dialog" class="template-dialog" aria-labelledby="users-title">
+  <h2 id="users-title"></h2>
+  <p id="users-help"></p>
+  <form id="users-form" class="users-form">
+    <input id="users-input" class="well" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="33">
+    <button id="users-add" class="text-button" type="submit"></button>
+  </form>
+  <p id="users-error" class="card-error" role="alert"></p>
+  <ul id="users-list" class="users-list"></ul>
+  <p id="users-empty" class="empty" hidden></p>
+  <div class="buttons"><button id="users-close" type="button"></button></div>
+</dialog>
+<script type="module" src="app.js?v=mwdbplbi"></script>
+</body>
+</html>
